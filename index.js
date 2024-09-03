@@ -57,6 +57,7 @@ const main = async () => {
 		await bot.sendMessage(targetUser.telegram_id, message);
 		userRepository.updateStatus(targetUser.telegram_id);
 		console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
+		await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 3000) + 2000));
 	}
 
 	console.log('Messages have been sent to all users.');
