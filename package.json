@@ -1,0 +1,17 @@
+{
+  "name": "ses-tg-inform-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup": "cp .env.example .env && cp message.txt.example message.txt && npm install",
+    "start": "node index.js"
+  },
+  "author": "Volodymyr Malishevskyi",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.2.1",
+    "dotenv": "^16.4.5",
+    "telegram": "^2.24.11"
+  }
+}
