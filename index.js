@@ -63,13 +63,13 @@ const main = async () => {
 			await bot.sendMessage(targetUser.telegram_id, randomMessage);
 			userRepository.updateStatus(targetUser.telegram_id);
 			console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
-			await delay(getRandomInt(delayMin, delayMax) * 1000);
 		} catch (err) {
 			console.error(
 				`BOT: Error sending message to user. Username: ${targetUser.telegram_id}, ID: ${targetUser.username}.`,
 				err,
 			);
 		}
+		await delay(getRandomInt(delayMin, delayMax) * 1000);
 	}
 
 	console.log('Messages have been sent to all users.');
