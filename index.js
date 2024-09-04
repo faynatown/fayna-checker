@@ -3,6 +3,7 @@ require('dotenv').config();
 const question = require('./question');
 const UserRepository = require('./user-repository');
 const UserBot = require('./userbot');
+const { getRandomInt, delay } = require('./utils');
 
 const bot = new UserBot();
 const userRepository = new UserRepository();
@@ -11,10 +12,11 @@ const main = async () => {
 	const apiId = parseInt(process.env.TELEGRAM_API_ID);
 	const apiHash = process.env.TELEGRAM_API_HASH;
 	const chatId = process.env.TELEGRAM_TARGET_CHAT_ID;
+	const delayMin = process.env.BOT_SEND_MESSAGE_DELAY_MIN ?? 2;
+	const delayMax = process.env.BOT_SEND_MESSAGE_DELAY_MIN ?? 5;
 
 	if (!apiId || !apiHash || !chatId) {
-		console.error('Please provide your API ID and API hash in the .env file.');
-		return;
+		throw new Error('Config error: Please provide a config in the .env file.');
 	}
 
 	await bot.start(apiId, apiHash, {
@@ -47,17 +49,20 @@ const main = async () => {
 		return;
 	}
 
-	const message = await fs.readFile('message.txt', {
+	const lines = await fs.readFile('message.txt', {
 		encoding: 'utf-8',
 		flag: 'a+',
 	});
 
+	const messages = lines.split('\n');
+
 	const targetUsers = userRepository.getTargets();
 	for (const targetUser of targetUsers) {
-		await bot.sendMessage(targetUser.telegram_id, message);
+		const randomMessage = messages[getRandomInt(0, messages.length)];
+		await bot.sendMessage(targetUser.telegram_id, randomMessage);
 		userRepository.updateStatus(targetUser.telegram_id);
 		console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
-		await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 3000) + 2000));
+		await delay(getRandomInt(delayMin, delayMax) * 1000);
 	}
 
 	console.log('Messages have been sent to all users.');
