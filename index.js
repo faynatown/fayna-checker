@@ -58,11 +58,18 @@ const main = async () => {
 
 	const targetUsers = userRepository.getTargets();
 	for (const targetUser of targetUsers) {
-		const randomMessage = messages[getRandomInt(0, messages.length - 1)];
-		await bot.sendMessage(targetUser.telegram_id, randomMessage);
-		userRepository.updateStatus(targetUser.telegram_id);
-		console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
-		await delay(getRandomInt(delayMin, delayMax) * 1000);
+		try {
+			const randomMessage = messages[getRandomInt(0, messages.length - 1)];
+			await bot.sendMessage(targetUser.telegram_id, randomMessage);
+			userRepository.updateStatus(targetUser.telegram_id);
+			console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
+			await delay(getRandomInt(delayMin, delayMax) * 1000);
+		} catch (err) {
+			console.error(
+				`BOT: Error sending message to user. Username: ${targetUser.telegram_id}, ID: ${targetUser.username}.`,
+				err,
+			);
+		}
 	}
 
 	console.log('Messages have been sent to all users.');
