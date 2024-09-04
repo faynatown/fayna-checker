@@ -58,7 +58,7 @@ const main = async () => {
 
 	const targetUsers = userRepository.getTargets();
 	for (const targetUser of targetUsers) {
-		const randomMessage = messages[getRandomInt(0, messages.length)];
+		const randomMessage = messages[getRandomInt(0, messages.length - 1)];
 		await bot.sendMessage(targetUser.telegram_id, randomMessage);
 		userRepository.updateStatus(targetUser.telegram_id);
 		console.log(`Message has been sent to ${targetUser.username}. Status: ${targetUser.id}/${targetUsers.length}`);
