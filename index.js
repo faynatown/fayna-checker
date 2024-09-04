@@ -12,8 +12,8 @@ const main = async () => {
 	const apiId = parseInt(process.env.TELEGRAM_API_ID);
 	const apiHash = process.env.TELEGRAM_API_HASH;
 	const chatId = process.env.TELEGRAM_TARGET_CHAT_ID;
-	const delayMin = process.env.BOT_SEND_MESSAGE_DELAY_MIN ?? 2;
-	const delayMax = process.env.BOT_SEND_MESSAGE_DELAY_MAX ?? 5;
+	const delayMin = (parseInt(process.env.BOT_SEND_MESSAGE_DELAY_MIN) || undefined) ?? 2;
+	const delayMax = (parseInt(process.env.BOT_SEND_MESSAGE_DELAY_MAX) || undefined) ?? 5;
 
 	if (!apiId || !apiHash || !chatId) {
 		throw new Error('Config error: Please provide a config in the .env file.');
